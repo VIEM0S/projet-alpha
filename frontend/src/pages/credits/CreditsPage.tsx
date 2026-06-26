@@ -70,7 +70,7 @@ export default function CreditsPage() {
           <div className="stat-value">{credits?.filter(c => c.statut === 'EN_COURS').length ?? 0}</div>
         </div>
         <div className="stat-card">
-          <div className="stat-label">Échéances < 48h</div>
+          <div className="stat-label">Échéances &lt; 48h</div>
           <div className="stat-value" style={{ color: (echeances?.length ?? 0) > 0 ? '#DC2626' : undefined }}>
             {echeances?.length ?? 0}
           </div>
