@@ -15,6 +15,7 @@ const dashboardRoutes  = require('./routes/dashboard.routes');
 const alerteRoutes     = require('./routes/alerte.routes');
 
 const { errorHandler } = require('./middleware/error.middleware');
+const { demarrerJobs }  = require('./services/jobs.service');
 
 const app  = express();
 const PORT = process.env.PORT || 5000;
@@ -47,6 +48,7 @@ app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur le port ${PORT}`);
+  demarrerJobs();
 });
 
 module.exports = app;

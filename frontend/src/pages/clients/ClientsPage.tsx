@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { clientService } from '../../services';
 import { formatMontant, labelTypeClient } from '../../utils';
 import type { Client } from '../../types';
 
 export default function ClientsPage() {
+  const navigate = useNavigate();
   const qc = useQueryClient();
   const [search, setSearch] = useState('');
   const [showForm, setShowForm] = useState(false);
@@ -64,7 +66,8 @@ export default function ClientsPage() {
                     <td style={{ color: (c.solde_credit ?? 0) > 0 ? '#D97706' : undefined }}>
                       {(c.solde_credit ?? 0) > 0 ? formatMontant(c.solde_credit!) : '—'}
                     </td>
-                    <td><button className="btn btn-secondary btn-sm" onClick={() => openEdit(c)}>Modifier</button></td>
+                    <td><button className="btn btn-secondary btn-sm" onClick={() => navigate(`/clients/${c.id}`)}>Voir détail</button>
+                    <button className="btn btn-secondary btn-sm" onClick={() => openEdit(c)}>Modifier</button></td>
                   </tr>
                 ))}
                 {!clients?.length && <tr><td colSpan={5} style={{ textAlign: 'center', padding: 32, color: '#6B7280' }}>Aucun client</td></tr>}

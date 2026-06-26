@@ -109,4 +109,25 @@ const toggleActif = async (req, res, next) => {
   }
 };
 
-module.exports = { login, me, creerUtilisateur, listerUtilisateurs, toggleActif };
+
+
+// PATCH /api/auth/mot-de-passe
+const changerMotDePasse = async (req, res, next) => {
+  try {
+    const { ancien_mot_de_passe, nouveau_mot_de_passe } = req.body;
+    if (!ancien_mot_de_passe || !nouveau_mot_de_passe) {
+      return res.status(400).json({ message: 'Ancien et nouveau mot de passe requis' });
+    }
+    if (nouveau_mot_de_passe.length < 6) {
+      return res.status(400).json({ message: 'Le nouveau mot de passe doit contenir au moins 6 caractères' });
+    }
+    const { rows } = await db.query('SELECT mot_de_passe FROM utilisateurs WHERE id = $1', [req.user.id]);
+    const valid = await bcrypt.compare(ancien_mot_de_passe, rows[0].mot_de_passe);
+    if (!valid) return res.status(401).json({ message: 'Mot de passe actuel incorrect' });
+    const hash = await bcrypt.hash(nouveau_mot_de_passe, 12);
+    await db.query('UPDATE utilisateurs SET mot_de_passe = $1 WHERE id = $2', [hash, req.user.id]);
+    res.json({ message: 'Mot de passe modifié avec succès' });
+  } catch (err) { next(err); }
+};
+
+module.exports = { login, me, creerUtilisateur, listerUtilisateurs, toggleActif, changerMotDePasse };

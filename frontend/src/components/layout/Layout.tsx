@@ -15,14 +15,10 @@ export default function Layout() {
 
   const nbAlertes = alertes?.length ?? 0;
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+  const handleLogout = () => { logout(); navigate('/login'); };
 
   return (
     <div className="layout">
-      {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-logo">
           <h1>Projet Alpha</h1>
@@ -52,29 +48,42 @@ export default function Layout() {
             {nbAlertes > 0 && (
               <span style={{
                 marginLeft: 'auto', background: '#DC2626', color: '#fff',
-                borderRadius: '10px', padding: '1px 7px', fontSize: '11px'
+                borderRadius: 10, padding: '1px 7px', fontSize: 11,
               }}>
                 {nbAlertes}
               </span>
             )}
           </NavLink>
           <NavLink to="/clients">👥 Clients</NavLink>
+
+          {isResponsable && (
+            <>
+              <div className="nav-section">Administration</div>
+              <NavLink to="/utilisateurs">👤 Utilisateurs</NavLink>
+            </>
+          )}
         </nav>
 
         <div className="sidebar-user">
           <div className="user-name">{user?.prenom} {user?.nom}</div>
-          <div className="user-role">{user?.role === 'RESPONSABLE' ? 'Responsable' : 'Gestionnaire'}</div>
-          <button
-            onClick={handleLogout}
-            style={{ marginTop: 8, background: 'none', border: 'none', color: 'rgba(255,255,255,.6)',
-              cursor: 'pointer', fontSize: 12, padding: 0 }}
-          >
-            Se déconnecter →
-          </button>
+          <div className="user-role">
+            {user?.role === 'RESPONSABLE' ? 'Responsable' : 'Gestionnaire'}
+          </div>
+          <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+            <button onClick={() => navigate('/profil')}
+              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,.6)',
+                cursor: 'pointer', fontSize: 12, padding: 0 }}>
+              Mon profil
+            </button>
+            <button onClick={handleLogout}
+              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,.6)',
+                cursor: 'pointer', fontSize: 12, padding: 0 }}>
+              Déconnexion →
+            </button>
+          </div>
         </div>
       </aside>
 
-      {/* Contenu principal */}
       <main className="main-content">
         <Outlet />
       </main>
